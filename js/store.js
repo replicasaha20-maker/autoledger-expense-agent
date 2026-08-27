@@ -1,4 +1,4 @@
-const KEY = "autoledger_state_v1";
+const KEY = "autoledger_state_v2";
 
 const listeners = new Set();
 
