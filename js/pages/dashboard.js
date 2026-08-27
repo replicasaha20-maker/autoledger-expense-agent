@@ -14,8 +14,14 @@ export function render(container, ctx) {
 
   const statusCounts = { pending: 0, approved: 0, flagged: 0, rejected: 0 };
   expenses.forEach((e) => statusCounts[e.status]++);
-  const statusColors = { pending: "#3b6fd6", approved: "#1ba672", flagged: "#b7791f", rejected: "#d64545" };
-  const maxStatus = Math.max(1, ...Object.values(statusCounts));
+  const statusColors = { pending: "var(--blue)", approved: "var(--green)", flagged: "var(--amber)", rejected: "var(--red)" };
+  let donutCursor = 0;
+  const donutStops = Object.keys(statusCounts).map((key) => {
+    const pct = totalExpenses ? (statusCounts[key] / totalExpenses) * 100 : 0;
+    const start = donutCursor;
+    donutCursor += pct;
+    return `${statusColors[key]} ${start}% ${donutCursor}%`;
+  }).join(", ");
 
   const months = [...new Set(expenses.map((e) => monthKey(e.date)))].sort().slice(-4);
   const monthTotals = months.map((m) => ({
@@ -77,14 +83,21 @@ export function render(container, ctx) {
       </div>
       <div class="panel">
         <div class="panel-title">Expense Status</div>
-        <div class="status-rows">
-          ${Object.entries(statusCounts).map(([key, count]) => `
-            <div class="status-row">
-              <span class="status-dot" style="background:${statusColors[key]}"></span>
-              <span class="status-name">${key[0].toUpperCase() + key.slice(1)}</span>
-              <span class="status-count">${count}</span>
-              <div class="status-track"><div class="status-track-fill" style="width:${(count / maxStatus) * 100}%;background:${statusColors[key]}"></div></div>
-            </div>`).join("")}
+        <div class="donut-wrap">
+          <div class="donut-chart" style="background:${totalExpenses ? `conic-gradient(${donutStops})` : "conic-gradient(var(--border) 0% 100%)"}">
+            <div class="donut-hole">
+              <div class="donut-total">${totalExpenses}</div>
+              <div class="donut-total-label">Total</div>
+            </div>
+          </div>
+          <div class="donut-legend">
+            ${Object.entries(statusCounts).map(([key, count]) => `
+              <div class="donut-legend-row">
+                <span class="donut-legend-dot" style="background:${statusColors[key]}"></span>
+                <span class="donut-legend-name">${key[0].toUpperCase() + key.slice(1)}</span>
+                <span class="donut-legend-count">${count}</span>
+              </div>`).join("")}
+          </div>
         </div>
       </div>
     </div>
@@ -100,10 +113,10 @@ export function render(container, ctx) {
     </div>` : ""}
 
     <div class="quick-actions">
-      <button class="quick-btn accent" id="qa-run">${icons.bolt} Run Agent Now</button>
-      <button class="quick-btn primary" id="qa-submit">${icons.plus} Submit Expense</button>
-      <button class="quick-btn" id="qa-vendor">${icons.vendors} Add Vendor</button>
-      <button class="quick-btn" id="qa-log">${icons.log} View Agent Log</button>
+      <button class="quick-btn accent" id="qa-run"><span class="quick-btn-icon">${icons.bolt}</span><span class="quick-btn-label">Run Agent Now</span></button>
+      <button class="quick-btn primary" id="qa-submit"><span class="quick-btn-icon">${icons.plus}</span><span class="quick-btn-label">Submit Expense</span></button>
+      <button class="quick-btn" id="qa-vendor"><span class="quick-btn-icon">${icons.vendors}</span><span class="quick-btn-label">Add Vendor</span></button>
+      <button class="quick-btn" id="qa-log"><span class="quick-btn-icon">${icons.log}</span><span class="quick-btn-label">View Agent Log</span></button>
     </div>
 
     <div class="panel">

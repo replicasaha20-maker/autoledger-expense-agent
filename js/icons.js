@@ -19,6 +19,9 @@ export const icons = {
   spark: svg('<path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/>'),
   robot: svg('<rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 2v4M9 20v2M15 20v2"/><circle cx="9" cy="14" r="1.2" fill="currentColor"/><circle cx="15" cy="14" r="1.2" fill="currentColor"/>'),
   arrowRight: svg('<path d="M5 12h14M13 6l6 6-6 6"/>'),
+  menu: svg('<path d="M3 6h18M3 12h18M3 18h18"/>'),
+  sun: svg('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>'),
+  moon: svg('<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>'),
 };
 
 export function icon(name, cls = "") {

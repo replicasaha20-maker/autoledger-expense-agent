@@ -27,6 +27,8 @@ let currentPage = "dashboard";
 
 const navEl = document.getElementById("nav");
 const mainEl = document.getElementById("main");
+const menuToggleEl = document.getElementById("menu-toggle");
+const themeToggleEl = document.getElementById("theme-toggle");
 
 function renderNav() {
   const pendingCount = getState().expenses.filter((e) => e.status === "pending").length;
@@ -40,9 +42,43 @@ function renderNav() {
     `)
     .join("");
   navEl.querySelectorAll(".nav-item").forEach((btn) =>
-    btn.addEventListener("click", () => navigate(btn.dataset.page))
+    btn.addEventListener("click", () => {
+      closeMobileMenu();
+      navigate(btn.dataset.page);
+    })
   );
 }
+
+function closeMobileMenu() {
+  navEl.classList.remove("open");
+  menuToggleEl.setAttribute("aria-expanded", "false");
+  menuToggleEl.innerHTML = icons.menu;
+}
+
+menuToggleEl.innerHTML = icons.menu;
+menuToggleEl.addEventListener("click", () => {
+  const open = navEl.classList.toggle("open");
+  menuToggleEl.setAttribute("aria-expanded", String(open));
+  menuToggleEl.innerHTML = open ? icons.x : icons.menu;
+});
+
+function currentTheme() {
+  return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+}
+
+function renderThemeToggle() {
+  const t = currentTheme();
+  themeToggleEl.innerHTML = t === "dark" ? icons.sun : icons.moon;
+  themeToggleEl.title = t === "dark" ? "Switch to light mode" : "Switch to dark mode";
+}
+
+themeToggleEl.addEventListener("click", () => {
+  const next = currentTheme() === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  try { localStorage.setItem("autoledger_theme", next); } catch {}
+  renderThemeToggle();
+});
+renderThemeToggle();
 
 const ctx = {
   refresh: () => renderPage(currentPage, {}),

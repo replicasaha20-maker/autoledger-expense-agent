@@ -4,26 +4,39 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AutoLedger — Expense Approval Agent</title>
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("autoledger_theme");
+      if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  })();
+</script>
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 <div class="app-shell">
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-mark">AL</div>
-      <div>
-        <div class="brand-name">AutoLedger</div>
-        <div class="brand-sub">Expense Approval Agent</div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">AL</div>
+        <div>
+          <div class="brand-name">AutoLedger</div>
+          <div class="brand-sub">Expense Approval Agent</div>
+        </div>
+      </div>
+      <nav class="nav" id="nav"></nav>
+      <div class="topbar-actions">
+        <div class="agent-pulse" id="agent-pulse">
+          <span class="pulse-dot"></span>
+          <span class="pulse-text">Agent idle</span>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode" aria-label="Toggle dark mode"></button>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false"></button>
       </div>
     </div>
-    <nav class="nav" id="nav"></nav>
-    <div class="sidebar-footer">
-      <div class="agent-pulse">
-        <span class="pulse-dot"></span>
-        Agent idle — watching queue
-      </div>
-    </div>
-  </aside>
+  </header>
   <main class="main" id="main"></main>
 </div>
 
